@@ -1,0 +1,49 @@
+ZAD 7.1
+SELECT 
+    COUNT(oceny.ocena) AS ilosc_ocen,
+    gry.nazwa
+FROM oceny
+JOIN gry ON gry.id_gry = oceny.id_gry
+GROUP BY gry.nazwa
+ORDER BY ilosc_ocen DESC;
+
+Ilosc Ocen nazwa
+    48	  K2
+ZAD 7.2
+
+SELECT
+ Round( AVG(oceny.ocena),2) as Srednia_ocen ,
+ gry.nazwa 
+FROM oceny 
+JOIN gry on gry.id_gry = oceny.id_gry
+WHERE gry.kategoria = 'imprezowa' 
+GROUP by gry.nazwa;
+ZAD 7.3
+
+SELECT
+    COUNT(imie) AS liczba_osob
+FROM gracze
+WHERE id_gracza NOT IN (
+        SELECT id_gracza
+        FROM oceny
+        WHERE stan = 'posiada'
+    )
+  AND id_gracza IN (
+        SELECT id_gracza
+        FROM oceny
+        GROUP BY id_gracza
+    );
+
+
+Pewnie da się to lepiej
+
+To czatGPT
+
+SELECT COUNT(*) AS liczba_osob
+FROM gracze
+WHERE id_gracza IN (
+    SELECT id_gracza
+    FROM oceny
+    GROUP BY id_gracza
+    HAVING SUM(stan = 'posiada') = 0
+);
